@@ -19,7 +19,6 @@ export default function Celebrations() {
        <div className="timeline-card"><div className="timeline-card-top"><span>{hindi ? item.dayHi : item.dayEn}</span>{React.createElement(icons[item.id], { size: 22 })}</div><h3>{hindi ? item.titleHi : item.titleEn}</h3><div className="timeline-time"><Clock3 size={15}/>{hindi ? item.timeHi : item.timeEn}</div><p>{hindi ? item.descHi : item.descEn}</p></div>
      </motion.article>)}
    </section>
-   <div className="events-note"><CalendarDays size={18}/><p>{t('The Doli time is not specified on the printed invitation. Please confirm with the family before the day.', 'मुद्रित निमंत्रण में डोली का समय नहीं दिया गया है। कृपया परिवार से पुष्टि करें।')}</p></div>
    <section className="events-bottom"><Eyebrow light>{t('WE LOOK FORWARD TO SEEING YOU', 'आपसे मिलने की प्रतीक्षा है')}</Eyebrow><h2>{t('Come for the rituals.', 'रस्मों के लिए आइए।')} <em>{t('Stay for the memories.', 'यादों के लिए रुकिए।')}</em></h2><ButtonLink to="/venue" light>{t('Explore the venue', 'विवाह स्थल देखें')}</ButtonLink></section>
  </Shell>;
 }

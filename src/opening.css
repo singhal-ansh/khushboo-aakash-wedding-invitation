@@ -35,3 +35,6 @@
 .gate-message span{max-width:90vw;font-size:clamp(9px,1.5vw,12px);line-height:1.5;letter-spacing:.18em}
 .gate-message strong{display:block;max-width:90vw;font:clamp(38px,8vw,88px)/1.2 'Great Vibes',cursive;text-align:center;overflow-wrap:anywhere}
 .gate-message i{font:italic .6em/1.2 'Cormorant Garamond',serif}
+
+.opening-kicker{line-height:1.5;margin-bottom:16px}
+.opening-copy h1 span{line-height:1.1}

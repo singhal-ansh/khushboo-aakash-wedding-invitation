@@ -66,6 +66,6 @@ export default function Home() {
       <div className="gallery-tease-copy"><Eyebrow light>{t('LITTLE GLIMPSES OF LOVE', 'प्यार की कुछ झलकियाँ')}</Eyebrow><h2>{t('Moments that become', 'वो पल जो बन जाते हैं')} <em>{t('memories.', 'यादें।')}</em></h2><p>{t('A small collection of moments, details and the magic surrounding our special day.', 'कुछ खास पलों, खूबसूरत विवरणों और हमारे विशेष दिन के जादू का संग्रह।')}</p><ButtonLink to="/gallery" light>{t('Visit the gallery', 'तस्वीरें देखें')}</ButtonLink></div>
     </section>
 
-    <section className="final-invite"><span className="final-flower" aria-hidden="true">✳</span><p>{t('The honour of your presence is our greatest gift', 'आपकी उपस्थिति ही हमारा सबसे बड़ा उपहार है')}</p><h2>Khushboo <em>&</em> Aakash</h2><Link to="/venue">{t('Find your way to us', 'हम तक पहुँचें')} <ArrowUpRight size={15}/></Link></section>
+    <section className="final-invite"><p>{t('The honour of your presence is our greatest gift', 'आपकी उपस्थिति ही हमारा सबसे बड़ा उपहार है')}</p><h2>Khushboo <em>&</em> Aakash</h2><Link to="/venue">{t('Find your way to us', 'हम तक पहुँचें')} <ArrowUpRight size={15}/></Link></section>
   </>;
 }

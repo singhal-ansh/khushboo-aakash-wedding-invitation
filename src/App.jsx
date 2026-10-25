@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Routes, Route, useLocation, Link, NavLink } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { Volume2, VolumeX, Menu, X, Languages } from 'lucide-react';
+import weddingMusic from './assets/Perfect (Acoustic).mp3';
 import { AppContext } from './context.js';
 import { useCountdown, toDevanagari } from './hooks.js';
 import { PageTransition, SiteFooter } from './components/Shared.jsx';
@@ -16,7 +17,8 @@ const seen = () => { try { return sessionStorage.getItem('ka-opened') === '1'; }
 
 export default function App() {
   const [hindi, setHindi] = useState(false);
-  const [musicOn, setMusicOn] = useState(false);
+  const [musicOn, setMusicOn] = useState(true);
+  const audioRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [opened, setOpened] = useState(seen);
   const location = useLocation();
@@ -28,19 +30,30 @@ export default function App() {
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); setMenuOpen(false); }, [location.pathname]);
   useEffect(() => { document.documentElement.lang = hindi ? 'hi' : 'en'; }, [hindi]);
   useEffect(() => {
-    if (!musicOn) return;
-    // Needs a user gesture; starts a soft generated drone after the music button is tapped, with a gentle fade-in.
-    let ctx;
-    try {
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const master = ctx.createGain(); master.gain.setValueAtTime(0, ctx.currentTime); master.gain.linearRampToValueAtTime(0.018, ctx.currentTime + 2); master.connect(ctx.destination);
-      [174.61, 261.63, 349.23].forEach((f, i) => {
-        const osc = ctx.createOscillator(); const gain = ctx.createGain();
-        osc.type = i === 0 ? 'sine' : 'triangle'; osc.frequency.value = f; gain.gain.value = i === 0 ? 0.55 : 0.2;
-        osc.connect(gain); gain.connect(master); osc.start();
-      });
-    } catch {}
-    return () => { if (ctx && ctx.state !== 'closed') ctx.close(); };
+    const audio = audioRef.current;
+    if (!audio) return;
+    const removeResumeListeners = () => {
+      window.removeEventListener('pointerdown', resumeAudio);
+      window.removeEventListener('keydown', resumeAudio);
+    };
+    const resumeAudio = () => {
+      removeResumeListeners();
+      audio.play().catch(error => console.error('Unable to play wedding music:', error));
+    };
+    if (!musicOn) {
+      audio.pause();
+      removeResumeListeners();
+      return;
+    }
+    audio.play().catch(error => {
+      if (error.name === 'NotAllowedError') {
+        window.addEventListener('pointerdown', resumeAudio, { once: true });
+        window.addEventListener('keydown', resumeAudio, { once: true });
+      } else {
+        console.error('Unable to play wedding music:', error);
+      }
+    });
+    return removeResumeListeners;
   }, [musicOn]);
 
   const finishOpening = () => { try { sessionStorage.setItem('ka-opened', '1'); } catch {} setOpened(true); };
@@ -48,6 +61,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value={{ hindi, setHindi, musicOn, setMusicOn, t }}>
+      <audio ref={audioRef} src={weddingMusic} loop preload="auto" onError={() => console.error('Unable to load wedding music.')} />
       {!opened && <OpeningExperience onOpen={finishOpening} />}
       <div className={`app-shell ${opened ? 'app-visible' : 'app-hidden'}`}>
         <motion.div className="reading-progress" style={{ scaleX: progress }} />
